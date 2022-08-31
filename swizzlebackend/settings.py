@@ -25,7 +25,10 @@ SECRET_KEY = 'eju7dps3s*5wzm$@^@7g!c&5kn==@=zrc=96sbf2spe9-+@v!b'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+# security warning, do not set to true when moving to production
+CORS_ORIGIN_ALLOW_ALL = True
 
 
 # Application definition
@@ -39,9 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'firebase_auth',
+    'events',
+    'corsheaders',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -49,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'swizzlebackend.urls'
