@@ -40,9 +40,9 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
 
         id_token = auth_header.split(" ").pop()
         decoded_token = None
-        print()
         try:
             decoded_token = auth.verify_id_token(id_token)
+
         except Exception:
             raise InvalidAuthToken("Invalid auth token")
 
