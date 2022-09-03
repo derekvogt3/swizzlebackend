@@ -17,6 +17,7 @@ class Event(models.Model):
     location_lat = models.IntegerField()
     location_lng = models.IntegerField()
     number_of_attendees = models.IntegerField()
+    event_datetime = models.DateField()
 
     def __str__(self):
         return self.name
