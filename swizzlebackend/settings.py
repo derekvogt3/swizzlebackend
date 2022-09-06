@@ -156,3 +156,22 @@ DEFAULT_FILE_STORAGE = 'swizzlebackend.storage_backends.PublicMediaStorage'
 
 AWS_PRIVATE_MEDIA_LOCATION = 'media/private'
 PRIVATE_FILE_STORAGE = 'swizzlebackend.storage_backends.PrivateMediaStorage'
+
+DATABASES = {
+
+    'default': {
+
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+        'NAME': 'swizzle',
+
+        'USER': 'myuser',
+
+        'PASSWORD': 'mypass',
+
+        'HOST': 'localhost',
+
+        'PORT': '',
+
+    }
+}

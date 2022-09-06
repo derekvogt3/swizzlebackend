@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from events.models import Event
+from events.models import Event, Invitation
 from events.serializers import EventSerializer
 
 
@@ -16,7 +16,10 @@ def event_list(request, format=None):
     elif request.method == 'POST':
         serializer = EventSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            newEvent = serializer.save()
+            invitation = Invitation(
+                user=request.user, event=newEvent, status="accepted", invite_idx=0)
+            invitation.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
