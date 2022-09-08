@@ -27,8 +27,13 @@ class Event(models.Model):
 
 
 class Invitation(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey(
+        Event, on_delete=models.CASCADE, related_name='invitations')
     status = models.CharField(default='invited', max_length=100)
-    invite_idx = models.IntegerField()
     date_joined = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('user', 'event')
