@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'events',
     'corsheaders',
     'storages',
+    'channels',
+    'chat',
 ]
 
 MIDDLEWARE = [
@@ -174,4 +176,15 @@ DATABASES = {
         'PORT': '',
 
     }
+}
+
+# Channels
+ASGI_APPLICATION = 'swizzlebackend.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
 }

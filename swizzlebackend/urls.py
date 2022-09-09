@@ -19,5 +19,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('events.urls')),
-    path('user/', include('firebase_auth.urls'))
+    path('user/', include('firebase_auth.urls')),
+    path('chat/', include('chat.urls')),
 ]

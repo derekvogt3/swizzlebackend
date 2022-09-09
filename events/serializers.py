@@ -1,5 +1,3 @@
-from dataclasses import field
-from pyexpat import model
 from rest_framework import serializers
 from .models import Event, Invitation
 from firebase_auth.serializers import MyUserSerializer
