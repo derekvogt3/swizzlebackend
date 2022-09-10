@@ -8,7 +8,6 @@ from events.serializers import EventSerializer, PublicInvitationSerializer, Crea
 from rest_framework.views import APIView
 from django.http import Http404
 from rest_framework.permissions import AllowAny
-import pdb
 import json
 
 
@@ -16,7 +15,9 @@ import json
 def event_list(request, format=None):
 
     if request.method == "GET":
-        events = Event.objects.all()
+
+        events = request.user.event_set.all()
+
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data)
 

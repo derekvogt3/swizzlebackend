@@ -7,14 +7,19 @@ from chat.models import ChatMessage
 from .serializers import ChatMessageSerializer
 from chat import serializers
 from uuid import UUID
+from json import JSONEncoder
 
 
-class UUIDEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, UUID):
-            # if the obj is uuid, we simply return the value of uuid
-            return obj.hex
-        return json.JSONEncoder.default(self, obj)
+old_default = JSONEncoder.default
+
+
+def new_default(self, obj):
+    if isinstance(obj, UUID):
+        return str(obj)
+    return old_default(self, obj)
+
+
+JSONEncoder.default = new_default
 
 
 class ChatConsumer(WebsocketConsumer):
@@ -59,7 +64,7 @@ class ChatConsumer(WebsocketConsumer):
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'message': json.dumps(response, cls=UUIDEncoder)
+                'message': json.dumps(response)
             }
         )
 
