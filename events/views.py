@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from django.http import Http404
 from rest_framework.permissions import AllowAny
 import json
+import pdb
 
 
 @api_view(['GET', 'POST'])
@@ -92,6 +93,10 @@ class InvitationList(APIView):
 
         serializer = PublicInvitationSerializer(data=request.data)
         if serializer.is_valid():
+
+            event = Event.objects.get(id=request.data["event"])
+            invitations = event.invitations.all()
+            invitations.update(is_active=False)
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
