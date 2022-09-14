@@ -18,6 +18,7 @@ class Event(models.Model):
     location_lng = models.FloatField(blank=False)
     number_of_attendees = models.IntegerField(blank=False)
     event_datetime = models.DateTimeField(blank=False)
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return self.name

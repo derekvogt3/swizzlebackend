@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from events.models import Event, Invitation
-from events.serializers import EventSerializer, PublicInvitationSerializer, CreateEventSerializer, InvitationWithEventsSerializer
+from events.serializers import EventSerializer, PublicInvitationSerializer, CreateEventSerializer, InvitationWithEventsSerializer, EventsWithMessagesSerializer
 from rest_framework.views import APIView
 from django.http import Http404
 from rest_framework.permissions import AllowAny
@@ -31,6 +31,17 @@ def event_list(request, format=None):
             invitation.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'POST'])
+def event_messages_list(request, format=None):
+
+    if request.method == "GET":
+
+        events = request.user.event_set.all()
+
+        serializer = EventsWithMessagesSerializer(events, many=True)
+        return Response(serializer.data)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -69,6 +80,8 @@ class PublicEventDetail(APIView):
 
     def get_object(self, pk):
         try:
+            invitation = Invitation.objects.get(id=pk)
+
             return Event.objects.filter(invitations=pk)[0]
 
         except Invitation.DoesNotExist:
@@ -96,6 +109,9 @@ class InvitationList(APIView):
 
             event = Event.objects.get(id=request.data["event"])
             invitations = event.invitations.all()
+            # maximum number of accepted invitations
+            if len(invitations) >= event.number_of_attendees:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
             invitations.update(is_active=False)
             serializer.save()
             return Response(serializer.data)
